@@ -1,0 +1,79 @@
+-- Create Database
+CREATE DATABASE HospitalManagement;
+USE HospitalManagement;
+
+-- Create Departments Table
+CREATE TABLE Departments (
+    DepartmentID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Location VARCHAR(255) NOT NULL
+);
+
+-- Create Doctors Table (Ensuring Mandatory Relationships)
+CREATE TABLE Doctors (
+    DoctorID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Specialization VARCHAR(100) NOT NULL,
+    Phone VARCHAR(15) NOT NULL,
+    DepartmentID INT NOT NULL, 
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID) ON DELETE CASCADE
+);
+
+-- Create Patients Table
+CREATE TABLE Patients (
+    PatientID INT AUTO_INCREMENT PRIMARY KEY,
+    Name VARCHAR(100) NOT NULL,
+    Age INT NOT NULL,
+    Gender ENUM('Male', 'Female', 'Other') NOT NULL,
+    Phone VARCHAR(15) NOT NULL
+);
+
+-- Create Appointments Table (Ensuring Mandatory Relationships)
+CREATE TABLE Appointments (
+    AppointmentID INT AUTO_INCREMENT PRIMARY KEY,
+    PatientID INT NOT NULL, 
+    DoctorID INT NOT NULL,
+    Date DATE NOT NULL,
+    Time TIME NOT NULL,
+    Status ENUM('Scheduled', 'Completed', 'Cancelled') NOT NULL,
+    FOREIGN KEY (PatientID) REFERENCES Patients(PatientID) ON DELETE CASCADE,
+    FOREIGN KEY (DoctorID) REFERENCES Doctors(DoctorID) ON DELETE CASCADE
+);
+
+-- Insert Data into Departments
+INSERT INTO Departments (Name, Location) VALUES
+('Cardiology', 'Building A'),
+('Neurology', 'Building B'),
+('Orthopedics', 'Building C'),
+('Pediatrics', 'Building D'),
+('Radiology', 'Building E');
+
+-- Insert Data into Doctors
+INSERT INTO Doctors (Name, Specialization, Phone, DepartmentID) VALUES
+('Dr. Rahat', 'Cardiologist', '1234567890', 1),
+('Dr. Aminul', 'Neurologist', '0987654321', 2),
+('Dr. Nirob', 'Orthopedic', '1122334455', 3),
+('Dr. Shahadat', 'Pediatrician', '2233445566', 4),
+('Dr. Nooman', 'Radiologist', '3344556677', 5);
+
+-- Insert Data into Patients
+INSERT INTO Patients (Name, Age, Gender, Phone) VALUES
+('Jodu', 25, 'Female', '4455667788'),
+('Kodu', 40, 'Male', '5566778899'),
+('Modu', 30, 'Male', '6677889900'),
+('Lodu', 22, 'Female', '7788990011'),
+('Habu', 35, 'Female', '8899001122');
+
+-- Insert Data into Appointments
+INSERT INTO Appointments (PatientID, DoctorID, Date, Time, Status) VALUES
+(1, 1, '2025-03-20', '10:00:00', 'Scheduled'),
+(2, 2, '2025-03-21', '11:00:00', 'Scheduled'),
+(3, 3, '2025-03-22', '12:00:00', 'Completed'),
+(4, 4, '2025-03-23', '13:00:00', 'Scheduled'),
+(5, 5, '2025-03-24', '14:00:00', 'Cancelled');
+
+-- Verify Data
+SELECT * FROM Departments;
+SELECT * FROM Doctors;
+SELECT * FROM Patients;
+SELECT * FROM Appointments;
